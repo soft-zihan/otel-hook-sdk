@@ -7,7 +7,7 @@
 三层解耦架构：
 
 - **SDK**（本包）：纯机制，提供 Hook 接口、注册、执行和智能导出
-- **策略**（otel-hook-strategies）：纯逻辑，提供安全、过滤、审计、限流等可复用策略
+- **策略**（otel-hook-strategies）：纯逻辑，提供安全、过滤、审计、限流等可复用策略；TS 策略包另含 **StreamGuard 三门流式安全防线**（Qwen3Guard 小模型驱动，见 [docs/stream-guard.md](../docs/stream-guard.md)）
 - **智能体**：组合 SDK + 策略
 
 ## 安装

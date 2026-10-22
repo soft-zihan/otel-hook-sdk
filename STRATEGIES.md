@@ -215,3 +215,29 @@ cd otel-hook-strategies && pip install -e .
 ```python
 from otel_hook_strategies import DangerousCommandHook, AuditHook
 ```
+
+## 进阶：模型级安全审核策略（TypeScript）
+
+规则型策略（正则/关键词）之外，TS 策略包（`otel-hook-strategies-ts`）提供本地安全小模型（Qwen3Guard-Stream-4B）驱动的审核能力：
+
+| 策略 | 形态 | 说明 |
+|------|------|------|
+| `Qwen3GuardHook` | 标准 Hook | 全文审核，Safe / Controversial / Unsafe 三分类 + 置信度阈值拦截，fail-closed |
+| `StreamGuard` | 三门流式防线 | 门1 输入审核（主模型零调用拦截）→ 门2 流式句子级 hold-back 增量审核 → 门3 终检发布门；拦截 = 零暴露 |
+
+```typescript
+import { createStreamGuard, runGuardedStream } from 'otel-hook-strategies'
+
+const guard = createStreamGuard({ endpoint: 'http://localhost:8000', sessionId, userId, parentContext })
+
+const g = await guard.startTurn(messages)                 // 门1
+if (g.blocked) return showNotice(g.reason)
+
+const r = await runGuardedStream(                          // 门2+门3：包装任意 delta 流
+  signal => myLlmStream(signal), guard,
+  { onRelease: chunk => render(chunk) },                   // 只回调过检文本
+)
+if (r.outcome === 'blocked') rollbackTurn(r.blocked)       // 违规原文在 r.blocked.blockedText
+```
+
+与 agent 框架完全解耦：后端可替换（`GuardBackend` 接口）、参数可配置（`streamGuardFromEnv` 支持环境变量）、每次检测发射 Langfuse GUARDRAIL span。详见 [StreamGuard 使用指南](docs/stream-guard.md)，攻防验证见 [19 家族红队报告](docs/Safetymind_Pi_Attack_Defense_Report.md)。

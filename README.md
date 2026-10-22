@@ -11,7 +11,7 @@
 3. 自动为每个 hook 执行创建 span（记录耗时、错误）
 4. 收集并返回所有 hook 的返回值
 5. 智能导出 traces（能发就发，发不出就缓存）
-6. **StreamGuard 三门流式安全防线**（策略包内生能力）：Qwen3Guard-Stream-4B 本地安全小模型对输入/流式输出/终检做增量审核，hold-back 零暴露、fail-closed、Langfuse 全量归因 → [使用指南](docs/stream-guard.md) ｜ [攻防验证报告](Safetymind_Pi_Attack_Defense_Report.md)
+6. **StreamGuard 三门流式安全防线**（策略包内生能力）：Qwen3Guard-Stream-4B 本地安全小模型对输入/流式输出/终检做增量审核，hold-back 零暴露、fail-closed、Langfuse 全量归因 → [使用指南](docs/stream-guard.md) ｜ [攻防验证报告](docs/Safetymind_Pi_Attack_Defense_Report.md)
 
 **Hook 就是插入一段代码。** 你在里面写什么逻辑都行——发通知、记日志、改参数、抛异常、返回任意东西。SDK 只负责执行和记录，不解释返回值。
 
@@ -35,10 +35,12 @@ otel-hook-sdk/
 │   ├── qwen3guard_server.py   # Qwen3Guard-Stream-4B 审核服务（MPS/CUDA）
 │   └── tests/                 # 攻防实验产物存档
 ├── docs/                   # 文档与截图
-│   └── stream-guard.md        # StreamGuard 使用指南
+│   ├── stream-guard.md        # StreamGuard 使用指南
+│   ├── Safetymind_Pi_Attack_Defense_Report.md  # 19 家族攻防验证报告
+│   └── Safetymind_Demo_Documentation.md        # 原型 demo 文档
 ├── README.md
 ├── STRATEGIES.md           # 策略编写指南
-└── Safetymind_Pi_Attack_Defense_Report.md  # 19 家族攻防验证报告
+└── Safetymind原型开发.md    # 原型开发记录
 ```
 
 ## 安装
@@ -275,7 +277,7 @@ if (r.outcome === 'blocked') rollbackTurn(r.blocked)  // 违规原文在 r.block
 - 全部可配置：阈值 / failMode / hold-back 分块参数 / 断句器 / span 命名，或 `streamGuardFromEnv()` 走环境变量（`SAFE_GUARD`、`GUARD_THRESHOLD`、`NO_INPUT_BLOCK` 消融模式等）
 - 后端可替换：实现 `GuardBackend` 结构化接口即可（默认 `Qwen3GuardHook`，服务部署见 `deploy/qwen3guard_server.py`）
 - 每次检测发射 Langfuse GUARDRAIL span（verdict / 置信度 / 延迟 / 拦截点 / 被检文本）
-- 已经 19 家族红队攻防验证：详见 [docs/stream-guard.md](docs/stream-guard.md) 与 [攻防报告](Safetymind_Pi_Attack_Defense_Report.md)
+- 已经 19 家族红队攻防验证：详见 [docs/stream-guard.md](docs/stream-guard.md) 与 [攻防报告](docs/Safetymind_Pi_Attack_Defense_Report.md)
 
 ## Hook 机制
 

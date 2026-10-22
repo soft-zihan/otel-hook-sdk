@@ -12,6 +12,8 @@
 - **可独立测试**：每个策略都可以单独测试
 - **可配置**：所有策略都支持自定义配置
 
+> **注**：模型级安全审核能力（`Qwen3GuardHook` / `StreamGuard` 三门流式防线）目前仅在 TypeScript 策略包（`otel-hook-strategies-ts`）提供，用法见 [docs/stream-guard.md](../docs/stream-guard.md)；Python 版尚未移植。
+
 ## 架构
 
 ```

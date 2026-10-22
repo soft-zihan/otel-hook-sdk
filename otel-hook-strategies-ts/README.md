@@ -72,6 +72,28 @@ registerHook(SpanNames.MODEL_CALL, new WordFilterHook(), 'filter', 15);
 registerHook(SpanNames.TOOL_CALL, new AuditHook(), 'audit', 1000);
 ```
 
+### StreamGuard 三门流式防线
+
+```typescript
+import { createStreamGuard, runGuardedStream, guardServerAlive } from 'otel-hook-strategies';
+
+const endpoint = 'http://localhost:8000';   // deploy/qwen3guard_server.py
+if (await guardServerAlive(endpoint)) {
+  const guard = createStreamGuard({ endpoint, sessionId: 'lf-session', userId: 'alice', parentContext });
+
+  const g = await guard.startTurn(messages);              // 门1：输入审核（Unsafe≥0.7 → 主模型零调用）
+  if (!g.blocked) {
+    const r = await runGuardedStream(                      // 门2+门3：hold-back 流式审核
+      signal => myLlmStream(signal), guard,
+      { onRelease: chunk => render(chunk) },               // 只回调过检文本，拦截 = 零暴露
+    );
+    if (r.outcome === 'blocked') rollbackTurn(r.blocked);
+  }
+}
+```
+
+完整配置项（阈值 / failMode / 消融模式 / 断句器 / 环境变量）、Langfuse span 约定与后端替换见 [docs/stream-guard.md](../docs/stream-guard.md)。
+
 ## 自定义策略
 
 ```typescript
