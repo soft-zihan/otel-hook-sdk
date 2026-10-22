@@ -1,0 +1,26 @@
+{
+  "name": "otel-hook-strategies",
+  "version": "0.2.0",
+  "description": "Independent strategy packages for otel-hook SDK",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": ["otel-hook", "strategies", "hooks", "security", "audit"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
+    "otel-hook": "file:../otel-hook-ts"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.13.10",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.4.12",
+    "typescript": "^5.8.2"
+  }
+}

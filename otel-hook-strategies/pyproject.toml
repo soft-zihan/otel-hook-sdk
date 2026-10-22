@@ -1,0 +1,17 @@
+[project]
+name = "otel-hook-strategies"
+version = "0.1.0"
+description = "Independent strategy packages for otel-hook SDK"
+requires-python = ">=3.9"
+dependencies = [
+    "otel-hook>=0.1.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["*"]
+exclude = ["tests*"]

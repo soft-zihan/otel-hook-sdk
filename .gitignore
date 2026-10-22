@@ -1,0 +1,31 @@
+# 依赖与构建产物
+node_modules/
+dist/
+coverage/
+*.tgz
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# 本地数据 / trace 缓存 / 模型权重
+data/
+*.db
+*.sqlite
+*.sqlite3
+
+# 浏览器状态（可能含凭据，勿入库）
+.playwright-state/
+
+# 系统与环境
+.DS_Store
+.env
+.env.*
+
+# 调试日志（deploy/tests/ 下的攻防证据日志需入库，故不全局忽略 *.log）
+npm-debug.log*
+yarn-error.log*

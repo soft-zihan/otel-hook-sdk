@@ -1,0 +1,24 @@
+[project]
+name = "otel-hook"
+version = "0.1.0"
+description = "OpenTelemetry-based agent observability SDK with pluggable hook mechanism"
+requires-python = ">=3.9"
+dependencies = [
+    "opentelemetry-api>=1.20.0",
+    "opentelemetry-sdk>=1.20.0",
+    "opentelemetry-exporter-otlp-proto-grpc>=1.20.0",
+    "opentelemetry-semantic-conventions>=0.41b0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

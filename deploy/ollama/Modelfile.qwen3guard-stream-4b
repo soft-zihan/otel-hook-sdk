@@ -1,0 +1,22 @@
+# Qwen3Guard-Stream-4B Ollama Modelfile
+# 
+# Usage:
+# 1. Create ollama model: ollama create qwen3guard-stream-4b -f Modelfile
+# 2. Run: ollama run qwen3guard-stream-4b
+#
+# Note: Qwen3Guard-Stream requires custom architecture support
+# If ollama doesn't support it directly, use vLLM instead
+
+FROM /Users/han/.cache/modelscope/models/Qwen--Qwen3Guard-Stream-4B/snapshots/master
+
+# Set parameters for safety checking
+PARAMETER temperature 0.0
+PARAMETER top_p 0.9
+PARAMETER num_ctx 32768
+
+SYSTEM """You are Qwen3Guard, a safety moderation model. 
+Analyze the input and classify it into safety categories.
+Output format:
+Safety: Safe|Unsafe|Controversial
+Categories: Violent|Non-violent Illegal Acts|Sexual Content or Sexual Acts|PII|Suicide & Self-Harm|Unethical Acts|Politically Sensitive Topics|Copyright Violation|Jailbreak|None
+"""
