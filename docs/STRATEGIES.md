@@ -1,3 +1,5 @@
+l'h
+
 # 编写策略
 
 策略就是一个函数或类，你在里面写什么代码都行——发通知、记日志、改参数、抛异常、返回任意东西。SDK 只负责执行和记录，不解释返回值。
@@ -220,10 +222,11 @@ from otel_hook_strategies import DangerousCommandHook, AuditHook
 
 规则型策略（正则/关键词）之外，TS 策略包（`otel-hook-strategies-ts`）提供本地安全小模型（Qwen3Guard-Stream-4B）驱动的审核能力：
 
-| 策略 | 形态 | 说明 |
-|------|------|------|
-| `Qwen3GuardHook` | 标准 Hook | 全文审核，Safe / Controversial / Unsafe 三分类 + 置信度阈值拦截，fail-closed |
-| `StreamGuard` | 三门流式防线 | 门1 输入审核（主模型零调用拦截）→ 门2 流式句子级 hold-back 增量审核 → 门3 终检发布门；拦截 = 零暴露 |
+
+| 策略             | 形态         | 说明                                                                                                  |
+| ------------------ | -------------- | ------------------------------------------------------------------------------------------------------- |
+| `Qwen3GuardHook` | 标准 Hook    | 全文审核，Safe / Controversial / Unsafe 三分类 + 置信度阈值拦截，fail-closed                          |
+| `StreamGuard`    | 三门流式防线 | 门1 输入审核（主模型零调用拦截）→ 门2 流式句子级 hold-back 增量审核 → 门3 终检发布门；拦截 = 零暴露 |
 
 ```typescript
 import { createStreamGuard, runGuardedStream } from 'otel-hook-strategies'
